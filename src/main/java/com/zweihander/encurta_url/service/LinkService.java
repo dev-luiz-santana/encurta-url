@@ -15,12 +15,12 @@ public class LinkService {
 
     public String encurtaLink(String url){
         Optional<LinkModel> existe = repo.findByUrlOriginal(url);
+        LinkModel link = new LinkModel();
 
         if(existe.isPresent()){
             return existe.get().getCodigoUrl();
         }
 
-        LinkModel link = new LinkModel();
         link.setUrlOriginal(url);
 
         String codigo = Codigos.geraCodigo();
@@ -30,10 +30,24 @@ public class LinkService {
         return codigo;
     }
 
-    public String buscarUrlOriginal(String codigo) {
-        return repo.findByCodigoUrl(codigo)
-                .map(LinkModel::getUrlOriginal)
-                .orElseThrow(() -> new RuntimeException("Link não encontrado"));
+    public String buscarUrlOriginal(String codigo){
+        LinkModel link = repo.findByCodigoUrl(codigo)
+                .orElseThrow(() -> {
+                    return new RuntimeException("Link não econtrado");
+                });
+
+        repo.atualizarAcessos(codigo);
+
+        return link.getUrlOriginal();
     }
+
+
+//metodo antigo, m
+//    public String buscarUrlOriginal(String codigo) {
+//
+//        return repo.findByCodigoUrl(codigo)
+//                .map(LinkModel::getUrlOriginal)
+//                .orElseThrow(() -> new RuntimeException("Link não encontrado"));
+//    }
 
 }
