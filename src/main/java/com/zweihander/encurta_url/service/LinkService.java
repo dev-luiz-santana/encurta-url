@@ -13,11 +13,11 @@ public class LinkService {
     @Autowired
     private LinkRepo repo;
 
-    public String encurtaLink(String url){
+    public String encurtaLink(String url) {
         Optional<LinkModel> existe = repo.findByUrlOriginal(url);
         LinkModel link = new LinkModel();
 
-        if(existe.isPresent()){
+        if (existe.isPresent()) {
             return existe.get().getCodigoUrl();
         }
 
@@ -30,7 +30,7 @@ public class LinkService {
         return codigo;
     }
 
-    public String buscarUrlOriginal(String codigo){
+    public String buscarUrlOriginal(String codigo) {
         LinkModel link = repo.findByCodigoUrl(codigo)
                 .orElseThrow(() -> {
                     return new RuntimeException("Link não econtrado");
@@ -41,13 +41,10 @@ public class LinkService {
         return link.getUrlOriginal();
     }
 
-
-//metodo antigo, m
-//    public String buscarUrlOriginal(String codigo) {
-//
-//        return repo.findByCodigoUrl(codigo)
-//                .map(LinkModel::getUrlOriginal)
-//                .orElseThrow(() -> new RuntimeException("Link não encontrado"));
-//    }
+    public LinkModel buscarStatus(String codigo) {
+        return repo.findByCodigoUrl(codigo).orElseThrow(()
+                -> new RuntimeException("Link não encontrado")
+        );
+    }
 
 }

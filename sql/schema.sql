@@ -8,4 +8,3 @@ CREATE TABLE link(
 	codigo_link varchar(120) NOT NULL UNIQUE,
 	acessos int DEFAULT 0
 );
-
